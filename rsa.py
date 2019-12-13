@@ -1,4 +1,20 @@
+import sympy
+from typing import List
+
+def are_relatively_prime(a, b):
+    """ Проверяет являются ли два числа взаимнопростыми."""
+    for n in range(2, min(a, b) + 1):
+        if a % n == b % n == 0:
+            return False
+    return True
+
 def evklid(m, n):
+    """ Находит НОД двух чисел.
+    
+    На вход принимает два числа.
+    Возвращает НОД.
+
+    """
     while n * m > 0:
         if n > m:
             n = n % m 
@@ -6,52 +22,65 @@ def evklid(m, n):
             m = m % n
     return (m + n) 
 
-def phi(n):
-    result = 1
-    for i in range(2, n): 
-        if(evklid(i, n) == 1):
-            result+=1
-    return result 
+def is_prime(n):
+    """ Проверяет число на простоту. 
+    
+    На вход принимает число. (n > 0) 
+    На выход выдает:
+    True, если число простое,
+    False, если число сложное. 
+
+    """
+    return sympy.isprime(n)
 
 def rsa(p,q):
-    flag1 = True
-    flag2 = True
-    for i in range(2, int(p**0.5) + 1): 
-        if p % i == 0:
-            flag1 = False
-    for i in range(2, int(q**0.5) + 1): 
-        if q % i == 0:
-            flag2 = False
-    if (flag1 == False) or (flag2 == False):
+    """ Составляет открытый и закрытый ключ по алгоритму RSA.
+
+    На вход принимает два простых числа. (Если хотя бы 
+    одно из чисел не является простым, возвращает исключение).
+    Вычисляет их произведение n, которое называется модулем.
+    Вычисляет значение функции Эйлера f(n).
+    Выбирается произвольное число e,
+    взаимно простое со значением функции f(n).
+    С помощью алгоритма Евклида вычисляется число,
+    которое удовлетворяет условию de == 1 mod f(n). Возвращает:
+    Пару {n,e} - публикуется в качестве открытого ключа RSA.
+    Пару {n,d} - играет роль закрытого ключа RSA.
+
+    """
+    if  not(is_prime(p)) or not(is_prime(q)):
         raise ValueError('One of the numbers is not prime')
     else:
         n = p*q
-        f = phi(n)
-        openk = 0
-        i = 2
-        while i < f:
-            e = evklid(f, i)
-            if e == 1:
-                openk = i
+        f = (p - 1)*(q - 1)
+        for e in range(3, f, 2):
+            if are_relatively_prime(e, f):
                 break
-            i += 1
-        i = 2
-        while i < n:
-            if (i * openk) % f == 1:
-                closek = i
+        for d in range(3, f, 2):
+            if d * e % f == 1:
                 break
-            i += 1
-        r = ((n, openk),(n, closek))
-        return r
+        pubk = (n, e)
+        prk = (n, d)
+        return list(pubk),list(prk)
 
-def encode_rsa(p, q, m):
-    r = rsa(p,q)
-    c = m**r[0][1] % r[0][0]
+def encode_rsa(pubk : List, m): 
+    """ Кодирует сообщение с помощью открытого ключа RSA.
+
+    На вход получает открытый ключ и сообщение.
+    Возвращает закодированное сообщение.
+
+    """
+    c = m**pubk[1] % pubk[0]
     return c
 
-def decode_rsa(p, q, c):
-    r = rsa(p,q)
-    m = c**r[1][1] % r[1][0]
+def decode_rsa(prk : List, c):
+    """ Декодирует сообщение с помощью закрытого ключа RSA.
+
+    На вход получает закрытый ключ и закодированное сообщение.
+    Возвращает декодированное сообщение.
+    
+    """
+    m = c**prk[1] % prk[0]
     return m
 
 

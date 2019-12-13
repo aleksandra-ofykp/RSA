@@ -7,10 +7,10 @@ from rsa import rsa,encode_rsa,decode_rsa
 
 class RSATest(unittest.TestCase):
     def test_encrypt_open_and_close_key_1(self):
-        self.assertEqual(rsa(31, 29), ((899, 11), (899, 611)))
+        self.assertEqual(rsa(11, 13), ([143, 7], [143, 103]))
 
     def test_encrypt_open_and_close_key_2(self):
-        self.assertEqual(rsa(557, 577), ((321389, 5), (321389, 256205)))
+        self.assertEqual(rsa(3, 7), ([21, 5], [21, 5]))
 
     def test_numbers_is_prime(self):
         with self.assertRaisesWithMessage(ValueError):
@@ -21,16 +21,11 @@ class RSATest(unittest.TestCase):
         return self.assertRaisesRegex(exception, r".+")
     
     def test_encode_rsa_encrypt_massage_1(self):
-        self.assertEqual(encode_rsa(29, 31, 60), (308))
+        self.assertEqual(encode_rsa([899, 11], 60), (308))
 
     def test_decode_rsa_encrypt_massage_1(self):
-        self.assertEqual(decode_rsa(29, 31, 308), (60))
+        self.assertEqual(decode_rsa([899, 611], 308), (60))
 
-    def test_encode_rsa_encrypt_massage_2(self):
-        self.assertEqual(encode_rsa(557, 577, 2019), (276401))
-
-    def test_decode_rsa_encrypt_massage_2(self):
-        self.assertEqual(decode_rsa(557, 577, 276401), (2019))
 
     
 
