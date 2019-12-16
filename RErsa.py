@@ -35,7 +35,7 @@ def is_prime(n):
             return False
     return n > 1
 
-def rsa(p,q):
+def rsa(l):
     """ Составляет открытый и закрытый ключ по алгоритму RSA.
 
     Генерируется два простых числа.
@@ -49,11 +49,11 @@ def rsa(p,q):
     Пару {n,d} - играет роль закрытого ключа RSA.
 
     """
-    p = random.randint(2,1000)
-    q = random.randint(2,1000)     
+    p = random.randint(2,l)
+    q = random.randint(2,l)     
     while not(is_prime(p)) or not(is_prime(q)):
-        p = random.randint(2,1000)
-        q = random.randint(2,1000)
+        p = random.randint(2,l)
+        q = random.randint(2,l)
     n = p*q
     f = (p - 1) * (q - 1)
     e = random.randint(1,f)
