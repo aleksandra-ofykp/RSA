@@ -57,9 +57,10 @@ def rsa(k):
     """
     p = 4
     q = 4  
-    e = 65537   
-    p = random.randint(k, 2**k) ####
-    q = random.randint(k, 2**k) ####    
+    e = 65537 
+    while (not(is_prime(p)) or not(is_prime(q))):
+        p = random.randint(k, 2**k) ####
+        q = random.randint(k, 2**k) ####    
     n = p*q
     f = (p - 1) * (q - 1)
    
