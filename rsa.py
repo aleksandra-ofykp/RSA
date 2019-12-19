@@ -56,18 +56,16 @@ def rsa(k):
 
     """
     p = 4
-    q = 4     
-    while (not(is_prime(p)) or not(is_prime(q)) or
-        not(math.log2(k) == math.floor(math.log2(p + 1))) or 
-        not(math.log2(k) == math.floor(math.log2(q + 1)))):
-        p = random.randint(2, k) ####
-        q = random.randint(2, k) ####    
+    q = 4  
+    e = 65537   
+    p = random.randint(k, 2**k) ####
+    q = random.randint(k, 2**k) ####    
     n = p*q
     f = (p - 1) * (q - 1)
-    e = 65537
-    while adv_evk(e,f)[2] != 1:
-        r = adv_evk(e,f)
-    d = r[1]
+   
+    assert adv_evk(e,f)[2] == 1
+       
+    d = adv_evk(e,f)[0]
     pubk = (n, e)
     prk = (n, d)
     return list(pubk),list(prk)
