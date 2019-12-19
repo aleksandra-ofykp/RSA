@@ -41,6 +41,26 @@ def is_prime(n):
             return False
     return n > 1
 
+def pow_mod(x, n, mod):
+    """ Выполняет возведение в степень по модулю. 
+    
+    На вход принимает три числа. 
+    На выход выдает:
+    Результат возведения в ст. по модулю. 
+
+    """
+    res = 1
+    while n != 0:
+        if n % 2 != 0:
+            res *= x
+            res %= mod
+            n -= 1
+        else:
+            x *= x
+            x %= mod
+            n /= 2
+    return res
+
 def rsa(k):
     """ Составляет открытый и закрытый ключ по алгоритму RSA.
 
@@ -57,7 +77,7 @@ def rsa(k):
     """
     p = 4
     q = 4  
-    e = 65537 
+    e = 65537
     while (not(is_prime(p)) or not(is_prime(q))):
         p = random.randint(k, 2**k) ####
         q = random.randint(k, 2**k) ####    
@@ -78,7 +98,7 @@ def encode_rsa(pubk : List, m):
     Возвращает закодированное сообщение.
 
     """
-    c = m**pubk[1] % pubk[0]
+    c = pow_mod(m, pubk[1],pubk[0])
     return c
 
 def decode_rsa(prk : List, c):
@@ -88,5 +108,5 @@ def decode_rsa(prk : List, c):
     Возвращает декодированное сообщение.
     
     """
-    m = c**prk[1] % prk[0]
+    m = pow_mod(c, prk[1], prk[0])
     return m
