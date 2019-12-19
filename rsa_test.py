@@ -28,7 +28,7 @@ class RSATest(unittest.TestCase):
         self.assertEqual(decode_rsa([899, 611], 308), (60))
 
     def test_decode_encode(self):
-        pubk, prk = rsa(2**8)
+        pubk, prk = rsa(8)
         self.assertEqual(decode_rsa(prk, encode_rsa(pubk, 231)), 231)
     
 
