@@ -7,6 +7,12 @@ def are_relatively_prime(a, b):
     if evklid(a, b) == 1:
         return True
 
+def adv_evk(a, b):
+    if not b:
+        return (1, 0, a)
+    y, x, g = adv_evk(b, a % b)
+    return (x, y - (a // b) * x, g)
+
 def evklid(m, n):
     """ Находит НОД двух чисел.
     
@@ -52,19 +58,16 @@ def rsa(k):
     p = 4
     q = 4     
     while (not(is_prime(p)) or not(is_prime(q)) or
-        not(k == math.log2(p + 1)) or not(k == math.log2(p + 1)) or
-        not(k == math.log2(q + 1)) or not(k == math.log2(q + 1))):
-        p = random.randint(2, 1000) ####
-        q = random.randint(2, 1000) ####
-    print(p,q)    
+        not(math.log2(k) == math.floor(math.log2(p + 1))) or 
+        not(math.log2(k) == math.floor(math.log2(q + 1)))):
+        p = random.randint(2, k) ####
+        q = random.randint(2, k) ####    
     n = p*q
     f = (p - 1) * (q - 1)
-    e = random.randint(1,f)
-    while not(are_relatively_prime(f,e)):
-        e = random.randint(1,f)
-    for d in range(3, f, 2):
-        if d * e % f == 1:
-            break
+    e = 65537
+    while adv_evk(e,f)[2] != 1:
+        r = adv_evk(e,f)
+    d = r[1]
     pubk = (n, e)
     prk = (n, d)
     return list(pubk),list(prk)
