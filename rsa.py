@@ -118,6 +118,8 @@ def rsa(k):
     assert adv_evk(e,f)[2] == 1
        
     d = adv_evk(e,f)[0]
+    while d < 0:
+        d += f
     pubk = (n, e)
     prk = (n, d)
     return list(pubk),list(prk)
