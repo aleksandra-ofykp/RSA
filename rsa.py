@@ -7,6 +7,37 @@ def are_relatively_prime(a, b):
     if evklid(a, b) == 1:
         return True
 
+
+
+def prime(n, k = 50):
+    """ Тест Миллера-Рабина."""
+
+    prime = [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31]
+    if n < 2:
+        return False
+    for p in prime:
+        if n < p * p:
+            return True
+        if n % p == 0:
+            return False
+    r, s = 0, n - 1
+    while s % 2 == 0:
+        r += 1
+        s //= 2
+    for _ in range(k):
+        a = random.randrange(2, n - 1)
+        x = pow(a, s, n)
+        if x == 1 or x == n - 1:
+            continue
+        for _ in range(r - 1):
+            x = pow(x, 2, n)
+            if x == n - 1:
+                break
+        else:
+            return False
+    return True
+
+
 def adv_evk(a, b):
     if not b:
         return (1, 0, a)
@@ -78,7 +109,7 @@ def rsa(k):
     p = 4
     q = 4  
     e = 65537
-    while (not(is_prime(p)) or not(is_prime(q))):
+    while (not(prime(p)) or not(prime(q))):
         p = random.randint(k, 2**k) ####
         q = random.randint(k, 2**k) ####    
     n = p*q

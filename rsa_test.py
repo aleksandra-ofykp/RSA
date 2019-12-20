@@ -1,4 +1,5 @@
 import unittest
+import random
 
 from rsa import rsa,encode_rsa,decode_rsa,evklid,are_relatively_prime,adv_evk
 
@@ -29,7 +30,9 @@ class RSATest(unittest.TestCase):
 
     def test_decode_encode(self):
         pubk, prk = rsa(13)
-        self.assertEqual(decode_rsa(prk, encode_rsa(pubk, 231)), 231)
+        r = random.randint(1,500)
+        for i in range(1,r):
+            self.assertEqual(decode_rsa(prk, encode_rsa(pubk, i)), i)
     
 
 
